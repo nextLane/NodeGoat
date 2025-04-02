@@ -12,6 +12,14 @@ jobs:
         node-version: ["10.x", "12.x", "14.x"]
 
     steps:
+      - name: Use cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.npm
+            ~/.cache
+            key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+
       - name: Checkout https://github.com/${{ github.repository }}@${{ github.ref }}
         uses: actions/checkout@v2
         with:

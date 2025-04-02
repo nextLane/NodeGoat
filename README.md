@@ -160,3 +160,15 @@ Here are the amazing [contributors](https://github.com/OWASP/NodeGoat/graphs/con
 ## License
 
 Code licensed under the [Apache License v2.0.](http://www.apache.org/licenses/LICENSE-2.0)
+-e 
+## Security Configuration
+
+For production environments, set the following environment variables:
+
+- `ADMIN_PASSWORD_HASH`: Bcrypt hash for the admin password
+
+Example:
+```
+export ADMIN_PASSWORD_HASH="your-secure-bcrypt-hash"
+```
+

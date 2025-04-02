@@ -12,6 +12,10 @@ services:
 
   mongo:
     image: mongo:4.4
+    volumes:
+      - type: tmpfs
+        target: /tmp
+    read_only: true
     user: mongodb
     expose:
       - 27017

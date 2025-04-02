@@ -69,10 +69,31 @@ MongoClient.connect(db, (err, db) => {
 
     // Express middleware to populate "req.body" so we can access POST variables
     app.use(bodyParser.json());
+
+    // Parse cookies
+    app.use(cookieParser());
     app.use(bodyParser.urlencoded({
         // Mandatory in Express v4
         extended: false
     }));
+
+    // Enable CSRF protection
+    app.use(csrf({ cookie: true }));
+
+    // Add CSRF token to all responses
+    app.use(function(req, res, next) {
+        res.locals.csrfToken = req.csrfToken();
+        next();
+    });
+
+    // CSRF error handler
+    app.use(function(err, req, res, next) {
+        if (err.code !== "EBADCSRFTOKEN") return next(err);
+        
+        // Handle CSRF token errors
+        res.status(403);
+        res.send("Form tampered with");
+    });
 
     // Enable session management using express middleware
     app.use(session({
@@ -100,6 +121,24 @@ MongoClient.connect(db, (err, db) => {
         */
 
     }));
+
+    // Enable CSRF protection
+    app.use(csrf({ cookie: true }));
+
+    // Add CSRF token to all responses
+    app.use(function(req, res, next) {
+        res.locals.csrfToken = req.csrfToken();
+        next();
+    });
+
+    // CSRF error handler
+    app.use(function(err, req, res, next) {
+        if (err.code !== "EBADCSRFTOKEN") return next(err);
+        
+        // Handle CSRF token errors
+        res.status(403);
+        res.send("Form tampered with");
+    });
 
     /*
     // Fix for A8 - CSRF

@@ -13,6 +13,7 @@
             <div class="panel-body">
 
                 <form action="/research" method="get" role="search">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}" />
                     <div class="form-group">
                         <input type="hidden" id="url" name="url" value="https://finance.yahoo.com/quote/"/>
                         <input type="text" class="form-control" placeholder="Stock Symbol" name="symbol" />

@@ -43,7 +43,7 @@
 
 
                 <div class="table-responsive">
-                    <form method="POST" action="/contributions">
+                    <form method="POST" action=""><input type="hidden" name="_csrf" value="{{csrfToken}}" method="POST" action="/contributions">
                         <table class="table table-bordered table-hover tablesorter">
                             <thead>
                                 <tr>

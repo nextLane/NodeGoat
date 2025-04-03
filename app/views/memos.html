@@ -12,7 +12,7 @@
 
             <div class="panel-body">
 
-                <form action="/memos" method="post" role="search">
+                <form method="POST" action=""><input type="hidden" name="_csrf" value="{{csrfToken}}" action="/memos" method="post" role="search">
 
                     <div class="form-group">
                         <textarea class="form-control" name="memo"></textarea>

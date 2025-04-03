@@ -119,6 +119,8 @@ MongoClient.connect(db, (err, db) => {
     // Fix for A5 - Security MisConfig
     // TODO: make sure assets are declared before app.use(session())
     app.use(express.static(`${__dirname}/app/assets`));
+// Enable CSRF protection
+app.use(csrfProtection);
 
 
     // Initializing marked library

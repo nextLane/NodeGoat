@@ -104,7 +104,7 @@
 
 
 
-                            <form method="post" role="form" method="post" id="loginform">
+                            <form method="post"><input type="hidden" name="_csrf" value="{{csrfToken}}" method="post" role="form" method="post" id="loginform">
                                 <div class="form-group">
                                     <label for="userName">User Name</label>
                                     <input type="text" class="form-control" id="userName" name="userName" value="{{userName}}" placeholder="Enter User Name">

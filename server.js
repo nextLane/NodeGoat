@@ -12,6 +12,9 @@ const MongoClient = require("mongodb").MongoClient; // Driver for connecting to 
 const http = require("http");
 const marked = require("marked");
 //const nosniff = require('dont-sniff-mimetype');
+var csrf = require("csurf");
+var cookieParser = require("cookie-parser");
+
 const app = express(); // Web framework to handle routing requests
 const routes = require("./app/routes");
 const { port, db, cookieSecret } = require("./config/config"); // Application config properties
@@ -75,6 +78,8 @@ MongoClient.connect(db, (err, db) => {
     }));
 
     // Enable session management using express middleware
+app.use(cookieParser());
+
     app.use(session({
         // genid: (req) => {
         //    return genuuid() // use UUIDs for session IDs
@@ -117,6 +122,8 @@ MongoClient.connect(db, (err, db) => {
     app.set("view engine", "html");
     app.set("views", `${__dirname}/app/views`);
     // Fix for A5 - Security MisConfig
+app.use(cookieParser());
+
     // TODO: make sure assets are declared before app.use(session())
     app.use(express.static(`${__dirname}/app/assets`));
 

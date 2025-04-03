@@ -12,7 +12,7 @@
 
             <div class="panel-body">
 
-                <form action="/memos" method="post" role="search">
+                <form {% csrf_token %} action="/memos" method="post" role="search">
 
                     <div class="form-group">
                         <textarea class="form-control" name="memo"></textarea>

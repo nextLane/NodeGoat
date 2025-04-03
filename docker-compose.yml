@@ -11,6 +11,8 @@ services:
       - "4000:4000"
 
   mongo:
+    security_opt:
+      - no-new-privileges:true
     image: mongo:4.4
     user: mongodb
     expose:

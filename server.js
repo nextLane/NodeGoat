@@ -22,7 +22,7 @@ const fs = require("fs");
 const https = require("https");
 const path = require("path");
 const httpsOptions = {
-    key: fs.readFileSync(path.resolve(__dirname, "./artifacts/cert/server.key")),
+    key: fs.readFileSync(path.resolve(__dirname, "./config/credentials/server.key")),
     cert: fs.readFileSync(path.resolve(__dirname, "./artifacts/cert/server.crt"))
 };
 */

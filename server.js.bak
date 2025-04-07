@@ -1,5 +1,3 @@
-const https = require("https");
-const fs = require("fs");
 "use strict";
 
 const express = require("express");
@@ -144,10 +142,7 @@ MongoClient.connect(db, (err, db) => {
     });
 
     // Insecure HTTP connection
-    https.createServer({
-  key: fs.readFileSync("certs/key.pem"),
-  cert: fs.readFileSync("certs/cert.pem")
-}, app).listen(port, () => {
+    http.createServer(app).listen(port, () => {
         console.log(`Express http server listening on port ${port}`);
     });
 
@@ -159,13 +154,4 @@ MongoClient.connect(db, (err, db) => {
     });
     */
 
-});
-
-// Redirect HTTP to HTTPS
-const httpApp = express();
-httpApp.all('*', (req, res) => {
-  res.redirect('https://' + req.hostname + (process.env.PORT ? ':' + process.env.PORT : '') + req.url);
-});
-http.createServer(httpApp).listen(8080, () => {
-  console.log("Redirecting from HTTP to HTTPS at port 8080");
 });

@@ -160,3 +160,6 @@ Here are the amazing [contributors](https://github.com/OWASP/NodeGoat/graphs/con
 ## License
 
 Code licensed under the [Apache License v2.0.](http://www.apache.org/licenses/LICENSE-2.0)
+-e 
+## HTTPS Configuration
+This application now uses HTTPS for secure communication. A self-signed certificate is included for development purposes. In production, replace the certificates in the 'certs' directory with proper certificates from a trusted Certificate Authority.

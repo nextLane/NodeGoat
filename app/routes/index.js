@@ -1,30 +1,47 @@
-const SessionHandler = require("./session");
-const ProfileHandler = require("./profile");
-const BenefitsHandler = require("./benefits");
-const ContributionsHandler = require("./contributions");
-const AllocationsHandler = require("./allocations");
-const MemosHandler = require("./memos");
-const ResearchHandler = require("./research");
-const tutorialRouter = require("./tutorial");
-const ErrorHandler = require("./error").errorHandler;
+var SessionHandler = require("./session");
+var ProfileHandler = require("./profile");
+var BenefitsHandler = require("./benefits");
+var ContributionsHandler = require("./contributions");
+var AllocationsHandler = require("./allocations");
+var MemosHandler = require("./memos");
+var ResearchHandler = require("./research");
+var TutorialsHandler = require("./tutorials");
+var ErrorHandler = require("./error").errorHandler;
+var url = require("url");
 
-const index = (app, db) => {
+// Helper function to validate redirect URLs
+function isValidRedirect(redirectUrl) {
+    // If no URL provided, it's not valid
+    if (!redirectUrl) return false;
+    
+    // Parse the URL
+    const parsedUrl = url.parse(redirectUrl);
+    
+    // Allow-list approach: only allow specific domains or relative URLs
+    // Allow relative URLs (no hostname) or URLs to your own domain
+    return !parsedUrl.hostname || 
+           parsedUrl.hostname === 'localhost' || 
+           parsedUrl.hostname.endsWith('nodegoat.herokuapp.com');
+}
+
+var exports = function(app, db) {
 
     "use strict";
 
-    const sessionHandler = new SessionHandler(db);
-    const profileHandler = new ProfileHandler(db);
-    const benefitsHandler = new BenefitsHandler(db);
-    const contributionsHandler = new ContributionsHandler(db);
-    const allocationsHandler = new AllocationsHandler(db);
-    const memosHandler = new MemosHandler(db);
-    const researchHandler = new ResearchHandler(db);
+    var sessionHandler = new SessionHandler(db);
+    var profileHandler = new ProfileHandler(db);
+    var benefitsHandler = new BenefitsHandler(db);
+    var contributionsHandler = new ContributionsHandler(db);
+    var allocationsHandler = new AllocationsHandler(db);
+    var memosHandler = new MemosHandler(db);
+    var researchHandler = new ResearchHandler(db);
+    var tutorialsHandler = new TutorialsHandler(db);
 
     // Middleware to check if a user is logged in
-    const isLoggedIn = sessionHandler.isLoggedInMiddleware;
+    var isLoggedIn = sessionHandler.isLoggedInMiddleware;
 
     //Middleware to check if user has admin rights
-    const isAdmin = sessionHandler.isAdminUserMiddleware;
+    var isAdmin = sessionHandler.isAdminUserMiddleware;
 
     // The main page of the app
     app.get("/", sessionHandler.displayWelcomePage);
@@ -54,11 +71,7 @@ const index = (app, db) => {
     // Benefits Page
     app.get("/benefits", isLoggedIn, benefitsHandler.displayBenefits);
     app.post("/benefits", isLoggedIn, benefitsHandler.updateBenefits);
-    /* Fix for A7 - checks user role to implement  Function Level Access Control
-     app.get("/benefits", isLoggedIn, isAdmin, benefitsHandler.displayBenefits);
-     app.post("/benefits", isLoggedIn, isAdmin, benefitsHandler.updateBenefits);
-     */
-
+    
     // Allocations Page
     app.get("/allocations/:userId", isLoggedIn, allocationsHandler.displayAllocations);
 
@@ -67,19 +80,28 @@ const index = (app, db) => {
     app.post("/memos", isLoggedIn, memosHandler.addMemos);
 
     // Handle redirect for learning resources link
-    app.get("/learn", isLoggedIn, (req, res) => {
-        // Insecure way to handle redirects by taking redirect url from query string
-        return res.redirect(req.query.url);
+    app.get("/learn", isLoggedIn, function(req, res, next) {
+        // Fix for open redirect vulnerability
+        if (req.query.url && isValidRedirect(req.query.url)) {
+            return res.redirect(req.query.url);
+        } else {
+            // Default redirect or error page if URL is not valid
+            return res.redirect("/dashboard");
+        }
     });
 
     // Research Page
     app.get("/research", isLoggedIn, researchHandler.displayResearch);
 
-    // Mount tutorial router
-    app.use("/tutorial", tutorialRouter);
+    // Tutorials Page
+    app.get("/tutorials", isLoggedIn, tutorialsHandler.displayTutorials);
+    app.post("/tutorials", isLoggedIn, tutorialsHandler.displayTutorials);
+
+    // Admin page
+    app.get("/admin", isLoggedIn, isAdmin, sessionHandler.displayAdminPage);
 
     // Error handling middleware
     app.use(ErrorHandler);
 };
 
-module.exports = index;
+module.exports = exports;

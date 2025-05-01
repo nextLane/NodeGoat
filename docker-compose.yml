@@ -12,6 +12,8 @@ services:
 
   mongo:
     image: mongo:4.4
+    security_opt:
+      - no-new-privileges:true
     user: mongodb
     expose:
       - 27017

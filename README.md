@@ -160,3 +160,7 @@ Here are the amazing [contributors](https://github.com/OWASP/NodeGoat/graphs/con
 ## License
 
 Code licensed under the [Apache License v2.0.](http://www.apache.org/licenses/LICENSE-2.0)
+
+## Security Note
+Private keys and other sensitive credentials are stored in the `config/credentials` directory,
+which is excluded from version control. See `config/credentials/README.md` for more information.

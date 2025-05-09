@@ -160,3 +160,13 @@ Here are the amazing [contributors](https://github.com/OWASP/NodeGoat/graphs/con
 ## License
 
 Code licensed under the [Apache License v2.0.](http://www.apache.org/licenses/LICENSE-2.0)
+
+## Environment Variables
+
+The application uses environment variables for configuration. Create a `.env` file in the root directory with the following variables:
+
+```
+BCRYPT_WORK_FACTOR=10
+```
+
+You can adjust the BCRYPT_WORK_FACTOR based on your security requirements. Higher values are more secure but slower.

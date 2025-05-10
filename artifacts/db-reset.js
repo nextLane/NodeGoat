@@ -33,7 +33,7 @@ const USERS_TO_INSERT = [
         "lastName": "Smith",
         "benefitStartDate": "2025-11-30",
         "password": "User2_123"
-        //"password" : "$2a$10$Tlx2cNv15M0Aia7wyItjsepeA8Y6PyBYaNdQqvpxkIUlcONf1ZHyq", // User2_123
+"password" : bcrypt.hashSync("Admin_123", bcrypt.genSaltSync(10)),
     }];
 
 const tryDropCollection = (db, name) => {

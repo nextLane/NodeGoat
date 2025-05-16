@@ -1,6 +1,8 @@
 "use strict";
 
 const express = require("express");
+const csrf = require("csurf");
+const cookieParser = require("cookie-parser");
 const favicon = require("serve-favicon");
 const bodyParser = require("body-parser");
 const session = require("express-session");
@@ -119,6 +121,27 @@ MongoClient.connect(db, (err, db) => {
     // Fix for A5 - Security MisConfig
     // TODO: make sure assets are declared before app.use(session())
     app.use(express.static(`${__dirname}/app/assets`));
+// Add cookie-parser middleware
+app.use(cookieParser());
+
+// Setup CSRF protection
+const csrfProtection = csrf({ cookie: true });
+app.use(csrfProtection);
+
+// Make CSRF token available to views
+app.use((req, res, next) => {
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+// Add CSRF error handler
+app.use((err, req, res, next) => {
+  if (err.code !== "EBADCSRFTOKEN") return next(err);
+  
+  // Handle CSRF token errors
+  res.status(403);
+  res.send("Invalid CSRF token. Form submission rejected.");
+});
 
 
     // Initializing marked library
